@@ -18,7 +18,7 @@ export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }
                     href="https://chrome.google.com/webstore/detail/pontem-wallet/phkbamefinggmakgklpkljjmgibohnba"
                     target="_blank"
                 >
-                    <img src={githubLogo} alt="Chrome web store link"/>
+                    <img src={googleStoreLogo} alt="Chrome web store link"/>
                 </a>
                 <div className="divider"/>
                 <p className=" text">
@@ -31,7 +31,7 @@ export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <img src={googleStoreLogo} alt="Github app link"/>
+                    <img src={githubLogo} alt="Github app link"/>
                 </a>
                 <div className="divider"></div>
                 <p className="help text-center mt-4">
