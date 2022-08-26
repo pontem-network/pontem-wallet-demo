@@ -1,4 +1,4 @@
-export interface PontemWalletProvider {
+export interface IPontemWalletProvider {
     version: string;
     connect(): Promise<string | undefined>;
     account(): Promise<string | undefined>;
@@ -6,16 +6,16 @@ export interface PontemWalletProvider {
     signAndSubmit(payload: any, options?: any): Promise<any>;
 }
 
-export interface Window {
-    pontem?: PontemWalletProvider;
+export interface IWindow {
+    pontem?: IPontemWalletProvider;
 }
 
-export type AptosCreateTx = {
+export type TAptosCreateTx = {
     sender: string;
     maxGasAmount: string;
     gasUnitPrice: string;
     expiration: string;
-    payload: AptosTxPayload;
+    payload: TAptosTxPayload;
 };
 
 type TxPayloadCallFunction = {
@@ -30,4 +30,4 @@ type TxPayloadInstallModule = {
     modules: { bytecode: string }[];
 };
 
-export type AptosTxPayload = TxPayloadCallFunction | TxPayloadInstallModule;
+export type TAptosTxPayload = TxPayloadCallFunction | TxPayloadInstallModule;

@@ -1,4 +1,4 @@
-import {PontemWalletProvider, Window} from "./types";
+import {IPontemWalletProvider, IWindow} from "./types";
 
 export function camelCaseKeysToUnderscore(obj: any) {
     if (typeof obj !== 'object') {
@@ -29,11 +29,11 @@ export function camelCaseKeysToUnderscore(obj: any) {
     return obj;
 }
 
-export function detectPontemProvider<T extends PontemWalletProvider>({ timeout = 3000 } = {}): Promise<T | undefined> {
+export function detectPontemProvider<T extends IPontemWalletProvider>({ timeout = 3000 } = {}): Promise<T | undefined> {
     let handled = false;
 
     return new Promise((resolve) => {
-        if ((window as Window).pontem) {
+        if ((window as IWindow).pontem) {
             handleProvider();
         } else {
             setTimeout(() => {
@@ -46,7 +46,7 @@ export function detectPontemProvider<T extends PontemWalletProvider>({ timeout =
                 return;
             }
             handled = true;
-            const { pontem } = window as Window;
+            const { pontem } = window as IWindow;
 
             if (pontem) {
                 resolve(pontem as unknown as T);

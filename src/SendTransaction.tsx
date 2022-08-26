@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 
 import './styles.scss';
-import { AptosCreateTx } from "./types";
+import { TAptosCreateTx } from "./types";
+import { MaybeHexString } from "aptos";
 
 interface ISendTransaction {
-    onSendTransaction: (tx: AptosCreateTx) => Promise<any>;
-    sender?: string;
+    onSendTransaction: (tx: TAptosCreateTx) => Promise<any>;
+    sender?: MaybeHexString | null;
 }
 
 export const SendTransaction = ({ onSendTransaction, sender }: ISendTransaction) => {
     const [transactionHash, setTransactionHash] = useState(null);
 
     const initialValue = {
-        sender: sender!,
+        sender: sender!.toString(),
         gasUnitPrice: "1",
         maxGasAmount: "1000",
         expiration: new Date().getTime().toString(),
