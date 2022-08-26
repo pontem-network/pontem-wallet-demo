@@ -25,7 +25,7 @@ export const HippoPontemWallet = () => {
 
         return signAndSubmitTransaction(payload)
             .then((response: any) => {
-                return response.result.hash;
+                return response.hash;
             });
     }, [signAndSubmitTransaction]);
 

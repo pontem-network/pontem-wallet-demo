@@ -1,7 +1,6 @@
 import React from 'react';
-import { HashRouter, Route, Routes, NavLink } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { WalletProvider, PontemWalletAdapter } from '@manahippo/aptos-wallet-adapter';
-import { Link } from '@mui/material';
 
 import './styles.scss';
 import { PontemWallet } from "./PontemWallet";

@@ -13,7 +13,7 @@ export const PontemWallet = () => {
     const [address, setAddress] = useState<string | undefined>('');
     const [walletProvider, setWalletProvider] = useState<IPontemWalletProvider | undefined>(undefined);
 
-    const handleAddressChange = (currentAddress: string | any) => {
+    const handleAddressChange = useCallback((currentAddress: string | any) => {
         if (typeof address === 'string' && currentAddress){
             if (currentAddress !== address) {
                 setAddress(currentAddress);
@@ -23,7 +23,7 @@ export const PontemWallet = () => {
             setAddress(undefined);
             setConnected(false);
         }
-    }
+    }, [address]);
 
     const handleSendTransaction = useCallback(async (tx: TAptosCreateTx) => {
         const payload = camelCaseKeysToUnderscore(tx.payload);
@@ -63,7 +63,7 @@ export const PontemWallet = () => {
 
             localStorage.setItem('pontemWallet', 'connected');
         })
-    }, [handleAddressChange, walletProvider]);
+    }, [handleAddressChange]);
 
     const handleDisconnect = () => {
         setAddress(undefined);
