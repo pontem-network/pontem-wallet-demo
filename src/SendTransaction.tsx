@@ -11,14 +11,15 @@ interface ISendTransaction {
 
 export const SendTransaction = ({ onSendTransaction, sender }: ISendTransaction) => {
     const [transactionHash, setTransactionHash] = useState(null);
+    const senderAddress = sender!.toString()
 
     const initialValue = {
-        sender: sender!.toString(),
+        sender: senderAddress,
         gasUnitPrice: "1",
         maxGasAmount: "1000",
         expiration: new Date().getTime().toString(),
         payload: {
-            arguments: ["0x43417434fd869edee76cca2a4d2301e528a1551b1d719b75c350c3c97d15b8b9", "200000", "728565"],
+            arguments: [senderAddress, "200000", "728565"],
             function: "0x43417434fd869edee76cca2a4d2301e528a1551b1d719b75c350c3c97d15b8b9::scripts::swap",
             type: "entry_function_payload" as "entry_function_payload",
             typeArguments: [

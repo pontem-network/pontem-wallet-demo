@@ -36,8 +36,10 @@ body {
   height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .wallet {
@@ -185,6 +187,24 @@ body {
   &__title {
     margin: 20px 0;
     font-size: 1rem;
+  }
+}
+
+.header {
+  display: flex;
+  position: absolute;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+    text-underline-offset: 3px;
+  }
+
+  .is-active {
+    text-decoration: underline;
   }
 }
 
