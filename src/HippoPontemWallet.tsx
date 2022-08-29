@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, {useEffect, useCallback, useState, SyntheticEvent} from 'react';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
@@ -7,18 +7,25 @@ import { camelCaseKeysToUnderscore } from './utils';
 import { Hint } from './Hint';
 import { SendTransaction } from './SendTransaction';
 import { Address } from './Address';
+import { BasicModal } from './Modal';
 
-
-const WALLET_NAME = 'PontemWallet';
 
 export const HippoPontemWallet = () => {
     const {
         account,
         connected,
+        wallets,
+        wallet,
         connect,
         disconnect,
         signAndSubmitTransaction,
     } = useWallet();
+    const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.adapter.name);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const onModalClose = () => setIsModalOpen(false);
+    const onModalOpen = () => setIsModalOpen(true);
+
+    const adapters = wallets.map(wallet => wallet?.adapter.name);
 
     const handleSendTransaction = useCallback(async (tx: TAptosCreateTx) => {
         const payload = camelCaseKeysToUnderscore(tx.payload);
@@ -31,20 +38,35 @@ export const HippoPontemWallet = () => {
         }
     }, [signAndSubmitTransaction]);
 
-    const handleConnect = useCallback(async () => {
-        try {
-            await connect(WALLET_NAME);
-            localStorage.setItem('hippoPontemWallet', 'connected');
-        } catch (e) {
-            console.log(e);
+    const handleAdapterClick = (event: SyntheticEvent<HTMLButtonElement>) => {
+        const walletName = (event.target as HTMLButtonElement).value;
+        // need to set currentAdapterName
+        if (walletName) {
+            setAdapterName(walletName);
+            console.log('walletName', walletName);
+            handleConnect(walletName);
+            onModalClose();
         }
+    };
 
+    const handleConnect = useCallback(async (adapterName: string) => {
+        if (adapterName) {
+            console.log('currentAdapterName', adapterName);
+            try {
+                await connect(adapterName);
+                localStorage.setItem(adapterName, 'connected');
+            } catch (e) {
+                console.log(e);
+            }
+        }
     }, [connect]);
 
     const handleDisconnect = async () => {
         try {
             await disconnect();
-            localStorage.setItem('hippoPontemWallet', 'disconnected');
+            if (currentAdapterName) {
+                localStorage.setItem(currentAdapterName, 'disconnected');
+            }
         } catch (e) {
             console.log(e)
         }
@@ -62,20 +84,23 @@ export const HippoPontemWallet = () => {
     };
 
     useEffect(() => {
-        const status = localStorage.getItem('hippoPontemWallet');
-        if (status === 'disconnected') {
-            return;
-        } else if (status === 'connected') {
-            handleConnect();
+        if (currentAdapterName) {
+            const status = localStorage.getItem(currentAdapterName);
+            if (status === 'disconnected') {
+                return;
+            } else if (status === 'connected') {
+                handleConnect(currentAdapterName);
+            }
         }
     }, []);
 
 
     return (
         <div className="wallet">
+            <BasicModal adapters={adapters} isOpen={isModalOpen} handleClose={onModalClose} handleAdapterClick={handleAdapterClick} />
             {connected
                 ? <button className='w-button' onClick={handleDisconnect}>Disconnect wallet</button>
-                : <button className='w-button' onClick={handleConnect}>Connect wallet</button>
+                : <button className='w-button' onClick={onModalOpen}>Connect wallet</button>
             }
             <Address address={account?.address} />
             {connected && <SendTransaction sender={account?.address} onSendTransaction={handleSendTransaction} />}

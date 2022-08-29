@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
-import { WalletProvider, PontemWalletAdapter } from '@manahippo/aptos-wallet-adapter';
+import { WalletProvider, PontemWalletAdapter, MartianWalletAdapter, MultiMaskWalletAdapter } from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
 import { PontemWallet } from "./PontemWallet";
@@ -9,6 +9,8 @@ import { Header } from './Headers';
 
 const wallets = [
     new PontemWalletAdapter(),
+    new MartianWalletAdapter(),
+    new MultiMaskWalletAdapter(),
 ];
 
 function App() {
