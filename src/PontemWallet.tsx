@@ -48,16 +48,15 @@ export const PontemWallet = () => {
             }
 
             setWalletProvider(walletProvider);
-
-            walletProvider.connect().then(address => {
-                if (address) {
-                    setAddress(address);
-                    setConnected(true);
-                }
-            }).catch(_e => {
+            try {
+                const address = await walletProvider.connect();
+                setAddress(address);
+                setConnected(true);
+            } catch (e) {
                 setAddress('');
                 setConnected(false);
-            });
+                console.log(e);
+            }
 
             walletProvider.onChangeAccount(handleAddressChange);
 

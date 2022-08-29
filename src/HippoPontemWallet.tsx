@@ -23,21 +23,31 @@ export const HippoPontemWallet = () => {
     const handleSendTransaction = useCallback(async (tx: TAptosCreateTx) => {
         const payload = camelCaseKeysToUnderscore(tx.payload);
 
-        return signAndSubmitTransaction(payload)
-            .then((response: any) => {
-                return response.hash;
-            });
+        try {
+            const { hash } = await signAndSubmitTransaction(payload);
+            return hash;
+        } catch (e) {
+            console.log(e)
+        }
     }, [signAndSubmitTransaction]);
 
     const handleConnect = useCallback(async () => {
-        await connect(WALLET_NAME);
-        localStorage.setItem('hippoPontemWallet', 'connected');
+        try {
+            await connect(WALLET_NAME);
+            localStorage.setItem('hippoPontemWallet', 'connected');
+        } catch (e) {
+            console.log(e);
+        }
+
     }, [connect]);
 
-    const handleDisconnect = () => {
-        disconnect().then((_res) => {
+    const handleDisconnect = async () => {
+        try {
+            await disconnect();
             localStorage.setItem('hippoPontemWallet', 'disconnected');
-        })
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     const getHint = () => {
