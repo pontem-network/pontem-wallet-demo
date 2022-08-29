@@ -1,8 +1,8 @@
 {
-  "name": "wallet-example",
+  "name": "pontem-wallet-demo",
   "version": "0.1.0",
   "private": true,
-  "homepage":  "https://pontem-network/pontem-wallet-demo/",
+  "homepage":  "https://pontem-network.github.io/pontem-wallet-demo",
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",

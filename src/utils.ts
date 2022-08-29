@@ -12,7 +12,7 @@ export function camelCaseKeysToUnderscore(obj: any) {
         });
 
         // Only process if names are different
-        if (newName != oldName) {
+        if (newName !== oldName) {
             // Check for the old property name to avoid a ReferenceError in strict mode.
             // eslint-disable-next-line
             if (obj.hasOwnProperty(oldName)) {

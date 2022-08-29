@@ -29,10 +29,9 @@ export const HippoPontemWallet = () => {
             });
     }, [signAndSubmitTransaction]);
 
-    const handleConnect = useCallback(() => {
-        connect(WALLET_NAME).then((_res) => {
-            localStorage.setItem('hippoPontemWallet', 'connected');
-        });
+    const handleConnect = useCallback(async () => {
+        await connect(WALLET_NAME);
+        localStorage.setItem('hippoPontemWallet', 'connected');
     }, [connect]);
 
     const handleDisconnect = () => {
@@ -59,7 +58,7 @@ export const HippoPontemWallet = () => {
         } else if (status === 'connected') {
             handleConnect();
         }
-    }, [handleConnect]);
+    }, []);
 
 
     return (

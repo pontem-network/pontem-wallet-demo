@@ -19,13 +19,11 @@ export const SendTransaction = ({ onSendTransaction, sender }: ISendTransaction)
         maxGasAmount: "1000",
         expiration: new Date().getTime().toString(),
         payload: {
-            arguments: [senderAddress, "200000", "728565"],
-            function: "0x43417434fd869edee76cca2a4d2301e528a1551b1d719b75c350c3c97d15b8b9::scripts::swap",
+            arguments: [senderAddress, '1'],
+            function: "0x1::coin::transfer",
             type: "entry_function_payload" as "entry_function_payload",
             typeArguments: [
-                "0x1::aptos_coin::AptosCoin",
-                "0x43417434fd869edee76cca2a4d2301e528a1551b1d719b75c350c3c97d15b8b9::coins::USDT",
-                "0x43417434fd869edee76cca2a4d2301e528a1551b1d719b75c350c3c97d15b8b9::lp::LP<0x1::aptos_coin::AptosCoin, 0x43417434fd869edee76cca2a4d2301e528a1551b1d719b75c350c3c97d15b8b9::coins::USDT>"
+                '0x1::aptos_coin::AptosCoin',
             ],
         }
     };

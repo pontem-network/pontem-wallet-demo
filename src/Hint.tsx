@@ -17,6 +17,7 @@ export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }
                     className="store__link"
                     href="https://chrome.google.com/webstore/detail/pontem-wallet/phkbamefinggmakgklpkljjmgibohnba"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <img src={googleStoreLogo} alt="Chrome web store link"/>
                 </a>
