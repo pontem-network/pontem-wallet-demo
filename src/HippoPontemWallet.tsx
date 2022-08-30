@@ -17,7 +17,6 @@ export const HippoPontemWallet = () => {
         wallets,
         wallet,
         connect,
-        disconnect,
         signAndSubmitTransaction,
     } = useWallet();
 
@@ -58,23 +57,11 @@ export const HippoPontemWallet = () => {
         if (adapterName) {
             try {
                 await connect(adapterName);
-                localStorage.setItem(adapterName, 'connected');
             } catch (e) {
                 console.log(e);
             }
         }
     };
-
-    const handleDisconnect = async () => {
-        try {
-            await disconnect();
-            if (currentAdapterName) {
-                localStorage.setItem(currentAdapterName, 'disconnected');
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     const getHint = () => {
         if (!connected && (window as IWindow).pontem === undefined) {
@@ -86,17 +73,6 @@ export const HippoPontemWallet = () => {
 
         return null;
     };
-
-    useEffect(() => {
-        if (currentAdapterName) {
-            const status = localStorage.getItem(currentAdapterName);
-            if (status === 'disconnected') {
-                return;
-            } else if (status === 'connected') {
-                handleConnect(currentAdapterName);
-            }
-        }
-    }, []);
 
     useEffect(() => {
         setCurrentAddress(account?.address);
