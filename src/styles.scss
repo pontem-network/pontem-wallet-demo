@@ -217,5 +217,52 @@ body {
   }
 }
 
+.modal {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: #1c2127;
+    margin-bottom: 10px;
+  }
+
+  &__close {
+    color: #1c2127;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    cursor: pointer;
+    height: 100%;
+    text-align: center;
+  }
+
+  &__button {
+    display: block;
+    height: 30px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 5px 0!important;
+    background: #6e42ca!important;
+    border: 1px solid #6e42ca!important;
+    border-radius: 4px;
+    transition: background-color .2s,color .2s,border-color .2s,box-shadow .2s!important;
+
+    &:hover {
+      background: var(--hover-color)!important;
+      color: #1c2127!important;
+    }
+
+    &__text {
+      color: white;
+    }
+  }
+
+}
+
+
 
 

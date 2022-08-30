@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState, SyntheticEvent} from 'react';
+import React, { useEffect, useState, SyntheticEvent } from 'react';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
@@ -14,6 +14,8 @@ export const HippoPontemWallet = () => {
     const {
         account,
         connected,
+        connecting,
+        disconnecting,
         wallets,
         wallet,
         connect,
@@ -25,33 +27,34 @@ export const HippoPontemWallet = () => {
     const onModalClose = () => setIsModalOpen(false);
     const onModalOpen = () => setIsModalOpen(true);
 
-    const adapters = wallets.map(wallet => wallet?.adapter.name);
+    const adapters = wallets.map(wallet => ({
+        name: wallet?.adapter.name,
+        icon: wallet?.adapter.icon,
+    }));
 
-    const handleSendTransaction = useCallback(async (tx: TAptosCreateTx) => {
+    const handleSendTransaction = async (tx: TAptosCreateTx) => {
         const payload = camelCaseKeysToUnderscore(tx.payload);
-
         try {
             const { hash } = await signAndSubmitTransaction(payload);
             return hash;
         } catch (e) {
             console.log(e)
         }
-    }, [signAndSubmitTransaction]);
+    };
 
     const handleAdapterClick = (event: SyntheticEvent<HTMLButtonElement>) => {
-        const walletName = (event.target as HTMLButtonElement).value;
-        // need to set currentAdapterName
+        const walletName = (event.target as HTMLButtonElement).textContent;
+        console.log(walletName);
+
         if (walletName) {
             setAdapterName(walletName);
-            console.log('walletName', walletName);
             handleConnect(walletName);
             onModalClose();
         }
     };
 
-    const handleConnect = useCallback(async (adapterName: string) => {
+    const handleConnect = async (adapterName: string) => {
         if (adapterName) {
-            console.log('currentAdapterName', adapterName);
             try {
                 await connect(adapterName);
                 localStorage.setItem(adapterName, 'connected');
@@ -59,7 +62,7 @@ export const HippoPontemWallet = () => {
                 console.log(e);
             }
         }
-    }, [connect]);
+    };
 
     const handleDisconnect = async () => {
         try {
@@ -94,10 +97,12 @@ export const HippoPontemWallet = () => {
         }
     }, []);
 
+    const isLoading = connecting || disconnecting;
+
 
     return (
         <div className="wallet">
-            <BasicModal adapters={adapters} isOpen={isModalOpen} handleClose={onModalClose} handleAdapterClick={handleAdapterClick} />
+            <BasicModal isLoading={isLoading} adapters={adapters} isOpen={isModalOpen} handleClose={onModalClose} handleAdapterClick={handleAdapterClick} />
             {connected
                 ? <button className='w-button' onClick={handleDisconnect}>Disconnect wallet</button>
                 : <button className='w-button' onClick={onModalOpen}>Connect wallet</button>
