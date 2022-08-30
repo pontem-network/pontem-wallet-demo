@@ -13,7 +13,7 @@ export const Header = () => {
                 <Link variant='button' href="/" underline='none'>Pontem Native</Link>
             </NavLink>
             <NavLink to="/hippo-adapter" className={getActiveLink}>
-                <Link variant='button' href="/" underline='hover'>Hippo Adapter</Link>
+                <Link variant='button' href="/" underline='hover'>Wallet Adapter</Link>
             </NavLink>
         </header>
     )

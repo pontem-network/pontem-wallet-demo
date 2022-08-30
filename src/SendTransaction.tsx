@@ -9,7 +9,7 @@ interface ISendTransaction {
     sender?: MaybeHexString | null;
 }
 
-export const SendTransaction = ({ onSendTransaction, sender = '' }: ISendTransaction) => {
+export const SendTransaction = ({ onSendTransaction, sender }: ISendTransaction) => {
     const [transactionHash, setTransactionHash] = useState(null);
     const senderAddress = sender ? sender.toString() : '';
 
