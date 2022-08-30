@@ -1,13 +1,13 @@
-import React, { useEffect, useState, SyntheticEvent } from 'react';
-import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import React, {useEffect, useState, SyntheticEvent, useCallback} from 'react';
+import {useWallet, WalletName} from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
-import { IWindow, TAptosCreateTx } from './types';
+import { TAptosCreateTx } from './types';
 import { camelCaseKeysToUnderscore } from './utils';
-import { Hint } from './Hint';
 import { SendTransaction } from './SendTransaction';
 import { Address } from './Address';
 import { BasicModal } from './Modal';
+import { localStorageKey } from "./App";
 
 
 export const HippoPontemWallet = () => {
@@ -17,6 +17,7 @@ export const HippoPontemWallet = () => {
         wallets,
         wallet,
         connect,
+        select,
         signAndSubmitTransaction,
     } = useWallet();
 
@@ -44,47 +45,55 @@ export const HippoPontemWallet = () => {
 
     const handleAdapterClick = (event: SyntheticEvent<HTMLButtonElement>) => {
         const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
-        console.log(walletName);
 
         if (walletName) {
             setAdapterName(walletName);
             handleConnect(walletName);
+            select(walletName as WalletName);
             onModalClose();
         }
     };
 
-    const handleConnect = async (adapterName: string) => {
+    const handleConnect = useCallback(async (adapterName: string) => {
         if (adapterName) {
             try {
-                await connect(adapterName);
+                return await connect(adapterName);
             } catch (e) {
                 console.log(e);
             }
         }
-    };
+    }, [connect]);
 
-    const getHint = () => {
-        if (!connected && (window as IWindow).pontem === undefined) {
-            return <Hint hint={'download extension'}/>
-        }
-        if (!connected && (window as IWindow).pontem !== undefined) {
-            return <Hint hint={'connect wallet'}/>
-        }
-
-        return null;
-    };
 
     useEffect(() => {
         setCurrentAddress(account?.address);
     }, [account]);
 
+    useEffect(() => {
+        let alreadyConnectedWallet = localStorage.getItem(localStorageKey);
+        if (alreadyConnectedWallet) {
+            if (alreadyConnectedWallet.startsWith('"')) {
+                alreadyConnectedWallet = alreadyConnectedWallet.replace(/^"(.*)"$/, '$1');
+            }
+            handleConnect(alreadyConnectedWallet);
+            setAdapterName(alreadyConnectedWallet);
+        }
+    }, [])
+
     return (
         <div className="wallet">
-            <BasicModal adapters={adapters} isOpen={isModalOpen} handleClose={onModalClose} handleAdapterClick={handleAdapterClick} />
-            {!connected && <button className='w-button' onClick={onModalOpen}>Connect wallet</button>}
+            {<button className='w-button' onClick={onModalOpen}>Connect wallet</button>}
+
             <Address walletName={currentAdapterName} address={currentAddress} />
+
             {connected && <SendTransaction sender={currentAddress} onSendTransaction={handleSendTransaction} />}
-            {getHint()}
+
+            <BasicModal
+                adapters={adapters}
+                isOpen={isModalOpen}
+                handleClose={onModalClose}
+                handleAdapterClick={handleAdapterClick}
+            />
         </div>
     );
 }

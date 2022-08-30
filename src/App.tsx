@@ -12,6 +12,8 @@ const wallets = [
     new MartianWalletAdapter(),
 ];
 
+export const localStorageKey = 'hippoWallet';
+
 function App() {
     return (
         <HashRouter>
@@ -20,7 +22,7 @@ function App() {
                 <Routes>
                     <Route path='/pontem-native' element={<PontemWallet />}/>
                     <Route path='/hippo-adapter' element={
-                        <WalletProvider wallets={wallets}>
+                        <WalletProvider wallets={wallets} localStorageKey={localStorageKey}>
                             <HippoPontemWallet />
                         </WalletProvider>
                     }/>
