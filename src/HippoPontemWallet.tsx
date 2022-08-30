@@ -2,12 +2,13 @@ import React, {useEffect, useState, SyntheticEvent, useCallback} from 'react';
 import {useWallet, WalletName} from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
-import { TAptosCreateTx } from './types';
+import {IWindow, TAptosCreateTx} from './types';
 import { camelCaseKeysToUnderscore } from './utils';
 import { SendTransaction } from './SendTransaction';
 import { Address } from './Address';
 import { BasicModal } from './Modal';
 import { localStorageKey } from "./App";
+import {Hint} from "./Hint";
 
 
 export const HippoPontemWallet = () => {
@@ -17,9 +18,11 @@ export const HippoPontemWallet = () => {
         wallets,
         wallet,
         connect,
+        disconnect,
         select,
         signAndSubmitTransaction,
     } = useWallet();
+
 
     const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.adapter.name);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,27 +46,37 @@ export const HippoPontemWallet = () => {
         }
     };
 
-    const handleAdapterClick = (event: SyntheticEvent<HTMLButtonElement>) => {
+    const handleAdapterClick = useCallback(async (event: SyntheticEvent<HTMLButtonElement>) => {
         const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
 
-        if (walletName) {
-            setAdapterName(walletName);
-            handleConnect(walletName);
-            select(walletName as WalletName);
-            onModalClose();
-        }
-    };
+        try {
+            if (walletName) {
+                setAdapterName(walletName);
+                await handleConnect(walletName);
+                select(walletName as WalletName);
+                onModalClose();
+            }
+        } catch (_e) {}
+
+    }, [disconnect, select, currentAdapterName]);
 
     const handleConnect = useCallback(async (adapterName: string) => {
         if (adapterName) {
             try {
-                return await connect(adapterName);
+                await connect(adapterName);
             } catch (e) {
                 console.log(e);
             }
         }
     }, [connect]);
 
+    const handleDisconnect = useCallback(async() => {
+        try {
+            await disconnect();
+        } catch (_e) {
+        }
+        setAdapterName(undefined);
+    }, [disconnect])
 
     useEffect(() => {
         setCurrentAddress(account?.address);
@@ -73,20 +86,23 @@ export const HippoPontemWallet = () => {
         let alreadyConnectedWallet = localStorage.getItem(localStorageKey);
         if (alreadyConnectedWallet) {
             if (alreadyConnectedWallet.startsWith('"')) {
-                alreadyConnectedWallet = alreadyConnectedWallet.replace(/^"(.*)"$/, '$1');
+                alreadyConnectedWallet = JSON.parse(alreadyConnectedWallet) as string;
             }
-            handleConnect(alreadyConnectedWallet);
             setAdapterName(alreadyConnectedWallet);
         }
     }, [])
 
+
     return (
         <div className="wallet">
-            {<button className='w-button' onClick={onModalOpen}>Connect wallet</button>}
+            {!connected && <button className='w-button' onClick={onModalOpen}>Connect wallet</button>}
+            {connected && <button className='w-button' onClick={handleDisconnect}>Disconnect wallet</button>}
 
             <Address walletName={currentAdapterName} address={currentAddress} />
 
             {connected && <SendTransaction sender={currentAddress} onSendTransaction={handleSendTransaction} />}
+
+            {!connected && <Hint hint={'connect wallet'}/>}
 
             <BasicModal
                 adapters={adapters}
