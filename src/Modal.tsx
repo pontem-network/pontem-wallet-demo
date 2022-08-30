@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 
+import { camel2title } from "./utils";
+
 import './styles.scss';
 
 
@@ -46,7 +48,7 @@ export const BasicModal = ({ isOpen, handleClose, adapters = [], handleAdapterCl
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         {adapters.map(({ name, icon }, index) => (
                             <Button variant='text' className='modal__button' onClick={handleAdapterClick} key={name} type='button' data-value={name}>
-                                <span className='modal__button__text'>{name}</span>
+                                <span className='modal__button__text'>{camel2title(name)}</span>
                             </Button>
                         ))}
                     </Typography>

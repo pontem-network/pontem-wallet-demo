@@ -43,7 +43,7 @@ export const HippoPontemWallet = () => {
     };
 
     const handleAdapterClick = (event: SyntheticEvent<HTMLButtonElement>) => {
-        const walletName = (event.target as HTMLButtonElement).textContent;
+        const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
         console.log(walletName);
 
         if (walletName) {
