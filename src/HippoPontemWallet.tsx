@@ -14,16 +14,17 @@ export const HippoPontemWallet = () => {
     const {
         account,
         connected,
-        connecting,
-        disconnecting,
         wallets,
         wallet,
         connect,
         disconnect,
         signAndSubmitTransaction,
     } = useWallet();
+
     const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.adapter.name);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentAddress, setCurrentAddress] = useState(account?.address);
+
     const onModalClose = () => setIsModalOpen(false);
     const onModalOpen = () => setIsModalOpen(true);
 
@@ -97,18 +98,16 @@ export const HippoPontemWallet = () => {
         }
     }, []);
 
-    const isLoading = connecting || disconnecting;
-
+    useEffect(() => {
+        setCurrentAddress(account?.address);
+    }, [account]);
 
     return (
         <div className="wallet">
-            <BasicModal isLoading={isLoading} adapters={adapters} isOpen={isModalOpen} handleClose={onModalClose} handleAdapterClick={handleAdapterClick} />
-            {connected
-                ? <button className='w-button' onClick={handleDisconnect}>Disconnect wallet</button>
-                : <button className='w-button' onClick={onModalOpen}>Connect wallet</button>
-            }
-            <Address address={account?.address} />
-            {connected && <SendTransaction sender={account?.address} onSendTransaction={handleSendTransaction} />}
+            <BasicModal adapters={adapters} isOpen={isModalOpen} handleClose={onModalClose} handleAdapterClick={handleAdapterClick} />
+            {!connected && <button className='w-button' onClick={onModalOpen}>Connect wallet</button>}
+            <Address walletName={currentAdapterName} address={currentAddress} />
+            {connected && <SendTransaction sender={currentAddress} onSendTransaction={handleSendTransaction} />}
             {getHint()}
         </div>
     );

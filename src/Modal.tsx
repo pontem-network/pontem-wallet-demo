@@ -24,11 +24,9 @@ interface IBasicModal {
     handleClose: () => void;
     adapters: { name: string, icon: string }[];
     handleAdapterClick: (event: SyntheticEvent<HTMLButtonElement>) => void;
-    isLoading: boolean;
 }
 
-export const BasicModal = ({ isLoading, isOpen, handleClose, adapters = [], handleAdapterClick }: IBasicModal) => {
-    console.log('isLoading', isLoading);
+export const BasicModal = ({ isOpen, handleClose, adapters = [], handleAdapterClick }: IBasicModal) => {
     return (
         <div>
             <Modal
@@ -47,7 +45,7 @@ export const BasicModal = ({ isLoading, isOpen, handleClose, adapters = [], hand
 
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         {adapters.map(({ name, icon }, index) => (
-                            <Button disabled={isLoading} variant='text' className='modal__button' onClick={handleAdapterClick} key={name} type='button'>
+                            <Button variant='text' className='modal__button' onClick={handleAdapterClick} key={name} type='button' data-value={name}>
                                 <span className='modal__button__text'>{name}</span>
                             </Button>
                         ))}
