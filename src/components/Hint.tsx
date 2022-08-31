@@ -1,15 +1,13 @@
-import githubLogo from "../assets/app_github.svg";
-import googleStoreLogo from "../assets/app_google_store.svg";
-import connectLogo from "../assets/connect.svg";
-import React from "react";
+import React from 'react';
+import githubLogo from '../assets/app_github.svg';
+import googleStoreLogo from '../assets/app_google_store.svg';
+import connectLogo from '../assets/connect.svg';
 
 import '../styles.scss';
 
-
 export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }) => {
-
-    if (hint === 'download extension') {
-        return (
+  if (hint === 'download extension') {
+    return (
             <div className='hint'>
                 <p className="text">
                     Please install the new version of extension from the Chrome web store
@@ -56,11 +54,11 @@ export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }
                     &nbsp;for updates.
                 </p>
             </div>
-        )
-    }
+    );
+  }
 
-    if (hint === 'connect wallet') {
-        return (
+  if (hint === 'connect wallet') {
+    return (
             <div className='hint'>
                 <img src={connectLogo} alt=""/>
                 <p className="mb-4">
@@ -68,8 +66,8 @@ export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }
                     allow the site access to the account
                 </p>
             </div>
-        )
-    }
+    );
+  }
 
-    return null;
-}
+  return null;
+};

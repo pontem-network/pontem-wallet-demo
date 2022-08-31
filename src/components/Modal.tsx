@@ -4,32 +4,32 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 
-import { camel2title } from "../utils";
+import { camel2title } from '../utils';
 
 import '../styles.scss';
 
-
 const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: '#b3a0fc',
-    borderRadius: '10px',
-    boxShadow: 24,
-    p: 4,
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: '#b3a0fc',
+  borderRadius: '10px',
+  boxShadow: 24,
+  p: 4,
 };
 
 interface IBasicModal {
-    isOpen: boolean;
-    handleClose: () => void;
-    adapters: { name: string, icon: string }[];
-    handleAdapterClick: (event: SyntheticEvent<HTMLButtonElement>) => void;
+  isOpen: boolean;
+  handleClose: () => void;
+  adapters: { name: string, icon: string }[];
+  handleAdapterClick: (event: SyntheticEvent<HTMLButtonElement>) => void;
 }
 
-export const BasicModal = ({ isOpen, handleClose, adapters = [], handleAdapterClick }: IBasicModal) => {
-    return (
+export const BasicModal = ({
+  isOpen, handleClose, adapters = [], handleAdapterClick,
+}: IBasicModal) => (
         <div>
             <Modal
                 open={isOpen}
@@ -46,7 +46,7 @@ export const BasicModal = ({ isOpen, handleClose, adapters = [], handleAdapterCl
                     </div>
 
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {adapters.map(({ name, icon }, index) => (
+                        {adapters.map(({ name }) => (
                             <Button variant='text' className='modal__button' onClick={handleAdapterClick} key={name} type='button' data-value={name}>
                                 <span className='modal__button__text'>{camel2title(name)}</span>
                             </Button>
@@ -55,5 +55,4 @@ export const BasicModal = ({ isOpen, handleClose, adapters = [], handleAdapterCl
                 </Box>
             </Modal>
         </div>
-    );
-}
+);
