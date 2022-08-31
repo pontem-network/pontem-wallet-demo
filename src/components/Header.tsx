@@ -1,7 +1,7 @@
 import {NavLink} from "react-router-dom";
 import {Link} from "@mui/material";
 import React from "react";
-import './styles.scss';
+import '../styles.scss';
 
 
 export const Header = () => {
@@ -10,10 +10,10 @@ export const Header = () => {
     return (
         <header className="header">
             <NavLink to="/pontem-native" className={getActiveLink}>
-                <Link variant='button' href="/" underline='none'>Pontem Native</Link>
+                <Link variant='button' href="/Users/dmitrijkuksenko/pontem-wallet-demo/public" underline='none'>Pontem Native</Link>
             </NavLink>
             <NavLink to="/hippo-adapter" className={getActiveLink}>
-                <Link variant='button' href="/" underline='hover'>Wallet Adapter</Link>
+                <Link variant='button' href="/Users/dmitrijkuksenko/pontem-wallet-demo/public" underline='hover'>Wallet Adapter</Link>
             </NavLink>
         </header>
     )

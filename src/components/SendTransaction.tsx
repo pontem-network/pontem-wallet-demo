@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import './styles.scss';
-import { TAptosCreateTx } from "./types";
+import '../styles.scss';
+import { TAptosCreateTx } from "../types";
 import { MaybeHexString } from "aptos";
 
 interface ISendTransaction {

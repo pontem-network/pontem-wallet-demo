@@ -1,9 +1,9 @@
-import githubLogo from "./assets/app_github.svg";
-import googleStoreLogo from "./assets/app_google_store.svg";
-import connectLogo from "./assets/connect.svg";
+import githubLogo from "../assets/app_github.svg";
+import googleStoreLogo from "../assets/app_google_store.svg";
+import connectLogo from "../assets/connect.svg";
 import React from "react";
 
-import './styles.scss';
+import '../styles.scss';
 
 
 export const Hint = ({ hint }: { hint: 'download extension' | 'connect wallet' }) => {

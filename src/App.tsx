@@ -5,14 +5,13 @@ import { WalletProvider, PontemWalletAdapter, MartianWalletAdapter } from '@mana
 import './styles.scss';
 import { PontemWallet } from "./PontemWallet";
 import { HippoPontemWallet } from "./HippoPontemWallet";
-import { Header } from './Headers';
+import { Header } from './components';
+import { localStorageKey }  from "./consts";
 
 const wallets = [
     new PontemWalletAdapter(),
     new MartianWalletAdapter(),
 ];
-
-export const localStorageKey = 'hippoWallet';
 
 function App() {
     return (

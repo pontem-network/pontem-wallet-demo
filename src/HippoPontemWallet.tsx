@@ -2,13 +2,10 @@ import React, {useEffect, useState, SyntheticEvent, useCallback} from 'react';
 import {useWallet, WalletName} from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
-import {IWindow, TAptosCreateTx} from './types';
+import { TAptosCreateTx} from './types';
 import { camelCaseKeysToUnderscore } from './utils';
-import { SendTransaction } from './SendTransaction';
-import { Address } from './Address';
-import { BasicModal } from './Modal';
-import { localStorageKey } from "./App";
-import {Hint} from "./Hint";
+import { SendTransaction, Address, BasicModal, Hint } from './components';
+import { localStorageKey } from "./consts";
 
 
 export const HippoPontemWallet = () => {
@@ -73,8 +70,7 @@ export const HippoPontemWallet = () => {
     const handleDisconnect = useCallback(async() => {
         try {
             await disconnect();
-        } catch (_e) {
-        }
+        } catch (_e) {}
         setAdapterName(undefined);
     }, [disconnect])
 

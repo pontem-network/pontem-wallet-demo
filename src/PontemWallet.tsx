@@ -3,9 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './styles.scss';
 import { IPontemWalletProvider, IWindow, TAptosCreateTx } from './types';
 import { camelCaseKeysToUnderscore, detectPontemProvider } from './utils';
-import { Hint } from './Hint';
-import { SendTransaction } from './SendTransaction';
-import { Address } from './Address';
+import { Hint, SendTransaction, Address } from './components';
 
 
 export const PontemWallet = () => {
@@ -84,12 +82,10 @@ export const PontemWallet = () => {
 
     useEffect(() => {
         const status = localStorage.getItem('pontemWallet');
-        if (status === 'disconnected') {
-            return;
-        } else if (status === 'connected') {
+        if (status === 'connected') {
             handleConnect();
         }
-    }, [handleConnect]);
+    }, []);
 
 
     return (
@@ -98,7 +94,7 @@ export const PontemWallet = () => {
                 ? <button className='w-button' onClick={handleDisconnect}>Disconnect wallet</button>
                 : <button className='w-button' onClick={handleConnect}>Connect wallet</button>
             }
-            <Address address={address} />
+            <Address address={address} walletName='Pontem Wallet' />
             {connected && <SendTransaction sender={address} onSendTransaction={handleSendTransaction} />}
             {getHint()}
         </div>

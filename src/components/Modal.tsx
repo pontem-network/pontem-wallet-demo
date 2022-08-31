@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 
-import { camel2title } from "./utils";
+import { camel2title } from "../utils";
 
-import './styles.scss';
+import '../styles.scss';
 
 
 const style = {

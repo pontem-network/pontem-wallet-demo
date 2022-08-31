@@ -1,6 +1,6 @@
 import React from "react";
 import { MaybeHexString } from "aptos";
-import { camel2title } from './utils';
+import { camel2title } from '../utils';
 
 interface IAddressProps {
     address: string | MaybeHexString | undefined | null;
