@@ -1,5 +1,4 @@
-import {NavLink} from "react-router-dom";
-import {Link} from "@mui/material";
+import { NavLink } from "react-router-dom";
 import React from "react";
 import '../styles.scss';
 
@@ -10,10 +9,10 @@ export const Header = () => {
     return (
         <header className="header">
             <NavLink to="/pontem-native" className={getActiveLink}>
-                <Link variant='button' href="/Users/dmitrijkuksenko/pontem-wallet-demo/public" underline='none'>Pontem Native</Link>
+                Pontem Native
             </NavLink>
             <NavLink to="/hippo-adapter" className={getActiveLink}>
-                <Link variant='button' href="/Users/dmitrijkuksenko/pontem-wallet-demo/public" underline='hover'>Wallet Adapter</Link>
+               Wallet Adapter
             </NavLink>
         </header>
     )
