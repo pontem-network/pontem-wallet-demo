@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/pontem-wallet-demo/static/css/main.2506e67c.css",
-    "main.js": "/pontem-wallet-demo/static/js/main.6758004e.js",
+    "main.js": "/pontem-wallet-demo/static/js/main.8c56d3f3.js",
     "static/media/app_github.svg": "/pontem-wallet-demo/static/media/app_github.d62bf5e628c09913f054debfdf043803.svg",
     "static/media/app_google_store.svg": "/pontem-wallet-demo/static/media/app_google_store.5ae090e297ee9696fc58cdbb4e301a07.svg",
     "static/media/connect.svg": "/pontem-wallet-demo/static/media/connect.e3e7cdae0dd3255fe7e7b9c71ace8ba7.svg",
     "index.html": "/pontem-wallet-demo/index.html",
     "main.2506e67c.css.map": "/pontem-wallet-demo/static/css/main.2506e67c.css.map",
-    "main.6758004e.js.map": "/pontem-wallet-demo/static/js/main.6758004e.js.map"
+    "main.8c56d3f3.js.map": "/pontem-wallet-demo/static/js/main.8c56d3f3.js.map"
   },
   "entrypoints": [
     "static/css/main.2506e67c.css",
-    "static/js/main.6758004e.js"
+    "static/js/main.8c56d3f3.js"
   ]
 }
