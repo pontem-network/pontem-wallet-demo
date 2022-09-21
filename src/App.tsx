@@ -22,7 +22,11 @@ export function App() {
                     <Route index element={<PontemWallet />}/>
                     <Route path='/pontem-native' element={<PontemWallet />}/>
                     <Route path='/wallet-adapter' element={
-                        <WalletProvider wallets={wallets} localStorageKey={localStorageKey}>
+                        <WalletProvider
+                          wallets={wallets}
+                          localStorageKey={localStorageKey}
+                          autoConnect
+                        >
                             <HippoPontemWallet />
                         </WalletProvider>
                     }/>

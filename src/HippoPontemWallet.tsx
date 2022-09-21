@@ -17,7 +17,6 @@ export const HippoPontemWallet = () => {
     connected,
     wallets,
     wallet,
-    connect,
     disconnect,
     select,
     signAndSubmitTransaction,
@@ -37,47 +36,41 @@ export const HippoPontemWallet = () => {
 
   const handleSendTransaction = async (tx: TAptosCreateTx) => {
     const payload = camelCaseKeysToUnderscore(tx.payload);
+    const options = {
+      max_gas_amount: tx?.maxGasAmount,
+      gas_unit_price: tx?.gasUnitPrice,
+      expiration_timestamp_secs: tx?.expiration,
+    };
     try {
-      const { hash } = await signAndSubmitTransaction(payload);
+      const { hash } = await signAndSubmitTransaction(payload, options);
       return hash;
     } catch (e) {
       console.log(e);
     }
   };
 
-  const handleConnect = useCallback(async (adapterName: string) => {
-    if (adapterName) {
-      try {
-        await connect(adapterName);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }, [connect]);
-
-  const handleAdapterClick = useCallback(async (event: SyntheticEvent<HTMLButtonElement>) => {
-    const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
-
-    try {
-      if (walletName) {
-        setAdapterName(walletName);
-        await handleConnect(walletName);
-        select(walletName as WalletName);
-        onModalClose();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [disconnect, select, currentAdapterName]);
-
   const handleDisconnect = useCallback(async () => {
     try {
       await disconnect();
     } catch (error) {
       console.log(error);
+    } finally {
+      setAdapterName(undefined);
     }
-    setAdapterName(undefined);
   }, [disconnect]);
+
+  const handleAdapterClick = useCallback(async (event: SyntheticEvent<HTMLButtonElement>) => {
+    const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
+    try {
+      if (walletName) {
+        select(walletName as WalletName);
+        setAdapterName(walletName);
+        onModalClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [disconnect, select]);
 
   useEffect(() => {
     setCurrentAddress(account?.address);

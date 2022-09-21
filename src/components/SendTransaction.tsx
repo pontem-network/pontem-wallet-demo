@@ -15,8 +15,8 @@ export const SendTransaction = ({ onSendTransaction, sender }: ISendTransaction)
 
   const initialValue = {
     sender: senderAddress,
-    gasUnitPrice: '1',
-    maxGasAmount: '1000',
+    gasUnitPrice: '100',
+    maxGasAmount: '10000',
     expiration: new Date().getTime().toString(),
     payload: {
       arguments: [senderAddress, '1'],

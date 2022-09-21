@@ -11,7 +11,6 @@ export const Address = ({ address, walletName }: IAddressProps) => {
   if (!address) return null;
   const stringAddress = address.toString();
   const normalizedWalletName = walletName ? camel2title(walletName) : '';
-
   return (
         <div className='address'>
             <h6 className='address__title'>{`${normalizedWalletName} Address`}</h6>

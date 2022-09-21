@@ -50,8 +50,8 @@ export const PontemWallet = () => {
 
       setWalletProvider(provider);
       try {
-        const newAddress = await provider.connect();
-        setAddress(newAddress);
+        const response = await provider.connect();
+        setAddress(response.address);
         setConnected(true);
       } catch (e) {
         setAddress('');
