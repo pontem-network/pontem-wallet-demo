@@ -89,11 +89,8 @@ export const PontemWallet = () => {
 
   useEffect(() => {
     const status = localStorage.getItem('pontemWallet');
-    if (status === 'connected') {
-      handleConnect();
-    }
+    if (status === 'connected') handleConnect();
   }, []);
-
   return (
     <div className="wallet">
       {connected
