@@ -13,6 +13,8 @@ const wallets = [
   new MartianWalletAdapter(),
 ];
 
+const autoConnect = true;
+
 export function App() {
   return (
         <HashRouter>
@@ -25,9 +27,9 @@ export function App() {
                         <WalletProvider
                           wallets={wallets}
                           localStorageKey={localStorageKey}
-                          autoConnect
+                          autoConnect={autoConnect}
                         >
-                            <HippoPontemWallet />
+                            <HippoPontemWallet autoConnect={autoConnect} />
                         </WalletProvider>
                     }/>
                 </Routes>

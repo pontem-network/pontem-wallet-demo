@@ -10,8 +10,9 @@ import {
   SendTransaction, Address, BasicModal, Hint,
 } from './components';
 import { localStorageKey } from './consts';
+import { Loader } from './components/Loader';
 
-export const HippoPontemWallet = () => {
+export const HippoPontemWallet = ({ autoConnect }: { autoConnect: boolean }) => {
   const {
     account,
     connected,
@@ -25,7 +26,7 @@ export const HippoPontemWallet = () => {
   const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.adapter.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(account?.address);
-
+  const [loading, setLoading] = useState(true);
   const onModalClose = () => setIsModalOpen(false);
   const onModalOpen = () => setIsModalOpen(true);
 
@@ -83,8 +84,13 @@ export const HippoPontemWallet = () => {
         alreadyConnectedWallet = JSON.parse(alreadyConnectedWallet) as string;
       }
       setAdapterName(alreadyConnectedWallet);
+      if (autoConnect && currentAddress) setLoading(false);
+    } else {
+      setLoading(false);
     }
-  }, []);
+  }, [currentAddress]);
+
+  if (loading) return <Loader />;
 
   return (
     <div className="wallet">

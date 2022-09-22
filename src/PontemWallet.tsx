@@ -1,11 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {
+  useEffect, useState, useCallback,
+} from 'react';
 
 import './styles.scss';
 import { IPontemWalletProvider, IWindow, TAptosCreateTx } from './types';
 import { camelCaseKeysToUnderscore, detectPontemProvider } from './utils';
 import { Hint, SendTransaction, Address } from './components';
+import { Loader } from './components/Loader';
 
 export const PontemWallet = () => {
+  const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string | undefined>('');
   const [walletProvider, setWalletProvider] = useState<IPontemWalletProvider | undefined>();
@@ -65,6 +69,8 @@ export const PontemWallet = () => {
       setAddress('');
       setConnected(false);
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,7 +96,13 @@ export const PontemWallet = () => {
   useEffect(() => {
     const status = localStorage.getItem('pontemWallet');
     if (status === 'connected') handleConnect();
+    else {
+      setLoading(false);
+    }
   }, []);
+
+  if (loading) return <Loader />;
+
   return (
     <div className="wallet">
       {connected
@@ -98,7 +110,7 @@ export const PontemWallet = () => {
         : <button className='w-button' onClick={handleConnect}>Connect wallet</button>
       }
 
-      <Address address={address} walletName='Pontem Wallet' />
+      <Address address={address} walletName='Pontem' />
 
       {connected && (
         <SendTransaction sender={address} onSendTransaction={handleSendTransaction} />
