@@ -9,6 +9,7 @@ export interface IPontemWalletProvider {
   account(): Promise<string | undefined>;
   onChangeAccount(listener: (address: string | undefined) => void): () => void;
   signAndSubmit(payload: any, options?: any): Promise<any>;
+  disconnect(): Promise<null>;
 }
 
 export interface IWindow {

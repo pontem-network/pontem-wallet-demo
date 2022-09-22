@@ -15,10 +15,6 @@ export const PontemWallet = () => {
       if (currentAddress !== address) {
         setAddress(currentAddress);
       }
-      setConnected(true);
-    } else {
-      setAddress(undefined);
-      setConnected(false);
     }
   }, [address]);
 
@@ -40,34 +36,42 @@ export const PontemWallet = () => {
     }
   }, [walletProvider]);
 
-  const handleConnect = useCallback(() => {
-    detectPontemProvider({ timeout: 100 }).then(async (provider) => {
-      if (!provider) {
-        setWalletProvider(undefined);
-        setConnected(false);
-        return;
-      }
-
-      setWalletProvider(provider);
+  const handleConnect = async () => {
+    const getPontemProvider = async () => {
       try {
-        const response = await provider.connect();
-        setAddress(response.address);
-        setConnected(true);
+        const provider = await detectPontemProvider({ timeout: 100 });
+        if (!provider) {
+          setWalletProvider(undefined);
+          setConnected(false);
+          return;
+        }
+        setWalletProvider(provider);
+        return provider;
       } catch (e) {
-        setAddress('');
-        setConnected(false);
         console.log(e);
       }
+    };
 
-      provider.onChangeAccount(handleAddressChange);
+    try {
+      const provider = await getPontemProvider();
+      const response = await provider?.connect();
+      if (response?.address) {
+        setAddress(response.address);
+        setConnected(true);
+        provider?.onChangeAccount(handleAddressChange);
+        localStorage.setItem('pontemWallet', 'connected');
+      }
+    } catch (e) {
+      setAddress('');
+      setConnected(false);
+      console.log(e);
+    }
+  };
 
-      localStorage.setItem('pontemWallet', 'connected');
-    });
-  }, [handleAddressChange]);
-
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
     setAddress(undefined);
     setConnected(false);
+    await walletProvider?.disconnect();
     setWalletProvider(undefined);
     localStorage.setItem('pontemWallet', 'disconnected');
   };
