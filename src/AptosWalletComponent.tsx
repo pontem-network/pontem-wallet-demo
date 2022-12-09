@@ -1,7 +1,8 @@
 import React, {
   useEffect, useState, SyntheticEvent, useCallback,
 } from 'react';
-import { useWallet, WalletName } from '@manahippo/aptos-wallet-adapter';
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { WalletName } from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
 import { TAptosCreateTx } from './types';
@@ -11,19 +12,19 @@ import {
 } from './components';
 import { localStorageKey } from './consts';
 
-export function HippoPontemWallet() {
+export function AptosPontemWallet() {
   const {
     account,
     connected,
     wallets,
     wallet,
+    network,
     connect,
     disconnect,
-    select,
     signAndSubmitTransaction,
   } = useWallet();
 
-  const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.adapter.name);
+  const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(account?.address);
 
@@ -31,16 +32,16 @@ export function HippoPontemWallet() {
   const onModalOpen = () => setIsModalOpen(true);
 
   const adapters = wallets.map((item) => ({
-    name: item?.adapter.name,
-    icon: item?.adapter.icon,
+    name: item?.name,
+    icon: item?.icon,
   }));
 
   // eslint-disable-next-line consistent-return
   const handleSendTransaction = async (tx: TAptosCreateTx) => {
     const payload = camelCaseKeysToUnderscore(tx.payload);
     try {
-      const { hash } = await signAndSubmitTransaction(payload);
-      return hash;
+      const response = await signAndSubmitTransaction(payload);
+      return response.hash;
     } catch (e) {
       console.log(e);
     }
@@ -49,7 +50,7 @@ export function HippoPontemWallet() {
   const handleConnect = useCallback(async (adapterName: string) => {
     if (adapterName) {
       try {
-        await connect(adapterName as WalletName<typeof adapterName>);
+        await connect(adapterName as WalletName);
         // eslint-disable-next-line no-empty
       } catch (e) {}
     }
@@ -62,23 +63,21 @@ export function HippoPontemWallet() {
       if (walletName && currentAdapterName !== walletName) {
         setAdapterName(walletName);
         await handleConnect(walletName);
-        select(walletName as WalletName);
         onModalClose();
       }
     } catch (e) {
       console.log(e);
     }
-  }, [select, currentAdapterName, handleConnect]);
+  }, [ currentAdapterName, handleConnect]);
 
   const handleDisconnect = useCallback(async () => {
     try {
-      select(null as unknown as WalletName);
       await disconnect();
       // eslint-disable-next-line no-empty
     } catch (_e) {}
 
     setAdapterName(undefined);
-  }, [disconnect, select]);
+  }, [disconnect]);
 
   useEffect(() => {
     setCurrentAddress(account?.address);
@@ -102,6 +101,9 @@ export function HippoPontemWallet() {
       {connected && <button className="w-button" onClick={handleDisconnect} type="button">Disconnect wallet</button>}
 
       <Address walletName={currentAdapterName} address={currentAddress} />
+      { account?.publicKey && (<div> publicKey: {account?.publicKey}</div>) }
+      { network?.name && (<div>network: {network?.name}</div>) }
+
 
       {connected && (
         <SendTransaction
