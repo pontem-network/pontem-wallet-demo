@@ -7,17 +7,17 @@ import './styles.scss';
 import { TAptosCreateTx } from './types';
 import { camelCaseKeysToUnderscore } from './utils';
 import {
-  SendTransaction, Address, Hint, BasicModal,
+  SendTransaction, Address, BasicModal, Hint,
 } from './components';
 import { localStorageKey } from './consts';
+import { Loader } from './components/Loader';
 
-export function HippoPontemWallet() {
+export const HippoPontemWallet = ({ autoConnect }: { autoConnect: boolean }) => {
   const {
     account,
     connected,
     wallets,
     wallet,
-    connect,
     disconnect,
     select,
     signAndSubmitTransaction,
@@ -26,7 +26,7 @@ export function HippoPontemWallet() {
   const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.adapter.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(account?.address);
-
+  const [loading, setLoading] = useState(true);
   const onModalClose = () => setIsModalOpen(false);
   const onModalOpen = () => setIsModalOpen(true);
 
@@ -35,56 +35,48 @@ export function HippoPontemWallet() {
     icon: item?.adapter.icon,
   }));
 
-  // eslint-disable-next-line consistent-return
   const handleSendTransaction = async (tx: TAptosCreateTx) => {
     const payload = camelCaseKeysToUnderscore(tx.payload);
+    const options = {
+      max_gas_amount: tx?.maxGasAmount,
+      gas_unit_price: tx?.gasUnitPrice,
+      expiration_timestamp_secs: tx?.expiration,
+    };
     try {
-      const { hash } = await signAndSubmitTransaction(payload);
+      const { hash } = await signAndSubmitTransaction(payload, options);
       return hash;
     } catch (e) {
       console.log(e);
     }
   };
 
-  const handleConnect = useCallback(async (adapterName: string) => {
-    if (adapterName) {
-      try {
-        await connect(adapterName as WalletName<typeof adapterName>);
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
+  const handleDisconnect = useCallback(async () => {
+    try {
+      await disconnect();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAdapterName(undefined);
     }
-  }, [connect]);
+  }, [disconnect]);
 
   const handleAdapterClick = useCallback(async (event: SyntheticEvent<HTMLButtonElement>) => {
     const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
-
     try {
-      if (walletName && currentAdapterName !== walletName) {
-        setAdapterName(walletName);
-        await handleConnect(walletName);
+      if (walletName) {
         select(walletName as WalletName);
+        setAdapterName(walletName);
         onModalClose();
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
     }
-  }, [select, currentAdapterName, handleConnect]);
-
-  const handleDisconnect = useCallback(async () => {
-    try {
-      select(null as unknown as WalletName);
-      await disconnect();
-      // eslint-disable-next-line no-empty
-    } catch (_e) {}
-
-    setAdapterName(undefined);
   }, [disconnect, select]);
 
   useEffect(() => {
     setCurrentAddress(account?.address);
   }, [account]);
 
-  // check if localStorage has info about already connected wallet on first render
   useEffect(() => {
     let alreadyConnectedWallet = localStorage.getItem(localStorageKey);
     if (alreadyConnectedWallet) {
@@ -92,25 +84,26 @@ export function HippoPontemWallet() {
         alreadyConnectedWallet = JSON.parse(alreadyConnectedWallet) as string;
       }
       setAdapterName(alreadyConnectedWallet);
-      handleConnect(alreadyConnectedWallet);
+      if (autoConnect && currentAddress) setLoading(false);
+    } else {
+      setLoading(false);
     }
-  }, []);
+  }, [currentAddress]);
+
+  if (loading) return <Loader />;
 
   return (
     <div className="wallet">
-      {!connected && <button className="w-button" onClick={onModalOpen} type="button">Connect wallet</button>}
-      {connected && <button className="w-button" onClick={handleDisconnect} type="button">Disconnect wallet</button>}
+      {!connected && <button className='w-button' onClick={onModalOpen}>Connect wallet</button>}
+      {connected && <button className='w-button' onClick={handleDisconnect}>Disconnect wallet</button>}
 
       <Address walletName={currentAdapterName} address={currentAddress} />
 
       {connected && (
-        <SendTransaction
-          sender={currentAddress}
-          onSendTransaction={handleSendTransaction}
-        />
+        <SendTransaction sender={currentAddress} onSendTransaction={handleSendTransaction} />
       )}
 
-      {!connected && <Hint hint="connect wallet" />}
+      {!connected && <Hint hint={'connect wallet'}/>}
 
       <BasicModal
         adapters={adapters}
@@ -120,4 +113,4 @@ export function HippoPontemWallet() {
       />
     </div>
   );
-}
+};

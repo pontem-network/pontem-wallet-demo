@@ -4,7 +4,6 @@ export function camelCaseKeysToUnderscore(obj: any) {
   if (typeof obj !== 'object') {
     return obj;
   }
-
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const oldName in obj) {
     // Camel to underscore
@@ -15,13 +14,16 @@ export function camelCaseKeysToUnderscore(obj: any) {
       // Check for the old property name to avoid a ReferenceError in strict mode.
       // eslint-disable-next-line
             if (obj.hasOwnProperty(oldName)) {
+        // eslint-disable-next-line no-param-reassign
         obj[newName] = obj[oldName];
+        // eslint-disable-next-line no-param-reassign
         delete obj[oldName];
       }
     }
 
     // Recursion
     if (typeof obj[newName] === 'object') {
+      // eslint-disable-next-line no-param-reassign
       obj[newName] = camelCaseKeysToUnderscore(obj[newName]);
     }
   }
@@ -34,6 +36,13 @@ export function detectPontemProvider<T extends IPontemWalletProvider>(
   let handled = false;
 
   return new Promise((resolve) => {
+    if ((window as IWindow).pontem) {
+      handleProvider();
+    } else {
+      setTimeout(() => {
+        handleProvider();
+      }, timeout);
+    }
     function handleProvider() {
       if (handled) {
         return;
@@ -46,14 +55,6 @@ export function detectPontemProvider<T extends IPontemWalletProvider>(
       } else {
         resolve(undefined);
       }
-    }
-
-    if ((window as IWindow).pontem) {
-      handleProvider();
-    } else {
-      setTimeout(() => {
-        handleProvider();
-      }, timeout);
     }
   });
 }

@@ -7,15 +7,14 @@ interface IAddressProps {
   walletName?: string;
 }
 
-export function Address({ address, walletName }: IAddressProps) {
+export const Address = ({ address, walletName }: IAddressProps) => {
   if (!address) return null;
   const stringAddress = address.toString();
   const normalizedWalletName = walletName ? camel2title(walletName) : '';
-
   return (
-    <div className="address">
-      <h6 className="address__title">{`${normalizedWalletName} Address`}</h6>
-      <div className="address__value">{stringAddress}</div>
-    </div>
+        <div className='address'>
+            <h6 className='address__title'>{`${normalizedWalletName} Address`}</h6>
+            <div className='address__value'>{stringAddress}</div>
+        </div>
   );
-}
+};

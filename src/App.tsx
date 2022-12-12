@@ -1,17 +1,16 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { WalletProvider, PontemWalletAdapter, MartianWalletAdapter } from '@manahippo/aptos-wallet-adapter';
-import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+import { AptosWalletAdapterProvider } from '@aptos-labs/wallet-adapter-react';
 import { PontemWallet } from '@pontem/wallet-adapter-plugin';
-import { PetraWallet } from "petra-plugin-wallet-adapter";
+import { PetraWallet } from 'petra-plugin-wallet-adapter';
 
 import './styles.scss';
 import { PontemWallet as PontemWalletComponent } from './PontemWallet';
 import { HippoPontemWallet } from './HippoPontemWallet';
 import { Header } from './components';
 import { localStorageKey } from './consts';
-import { AptosPontemWallet } from "./AptosWalletComponent";
-
+import { AptosPontemWallet } from './AptosWalletComponent';
 
 const wallets = [
   new PontemWalletAdapter(),
@@ -20,11 +19,12 @@ const wallets = [
 
 const plugins = [
   new PontemWallet(),
-  new PetraWallet()
+  new PetraWallet(),
 ];
 
-function App() {
-  return (
+const autoConnect = true;
+
+export const App = () => (
     <HashRouter>
       <div className="app">
         <Header />
@@ -33,8 +33,11 @@ function App() {
           <Route
             path="/hippo-adapter"
             element={(
-              <WalletProvider wallets={wallets} localStorageKey={localStorageKey}>
-                <HippoPontemWallet />
+              <WalletProvider
+                wallets={wallets}
+                localStorageKey={localStorageKey}
+                autoConnect={autoConnect}>
+                <HippoPontemWallet autoConnect={autoConnect} />
               </WalletProvider>
                       )}
           />
@@ -47,7 +50,4 @@ function App() {
         </Routes>
       </div>
     </HashRouter>
-  );
-}
-
-export default App;
+);

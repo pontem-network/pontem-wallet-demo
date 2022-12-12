@@ -9,7 +9,7 @@ interface ISendTransaction {
   sender?: MaybeHexString | null;
 }
 
-export function SendTransaction({ onSendTransaction, sender }: ISendTransaction) {
+export const SendTransaction = ({ onSendTransaction, sender }: ISendTransaction) => {
   const [transactionHash, setTransactionHash] = useState(null);
   const senderAddress = sender ? sender.toString() : '';
 
@@ -21,7 +21,7 @@ export function SendTransaction({ onSendTransaction, sender }: ISendTransaction)
     payload: {
       arguments: [senderAddress, '1'],
       function: '0x1::coin::transfer',
-      type: 'entry_function_payload' as 'entry_function_payload',
+      type: 'entry_function_payload' as const,
       typeArguments: [
         '0x1::aptos_coin::AptosCoin',
       ],
@@ -41,25 +41,24 @@ export function SendTransaction({ onSendTransaction, sender }: ISendTransaction)
     });
   };
 
+  const showBackButton = !!transactionHash;
+
   return (
     <div className="send-transaction">
-      <div className="divider" />
+      <div className="divider"/>
       {!transactionHash
-        ? (
-          <div className="codeBlock">
-            <pre className="code">
+        ? <div className='codeBlock'>
+            <pre className='code'>
               {jsonPayload}
             </pre>
-          </div>
-        )
-        : (
-          <div className="send-transaction__hash">
-            <h5 className="send-transaction__title">Success! Transaction hash:</h5>
-            {transactionHash}
-          </div>
-        )}
-      <div className="divider" />
-      <button type="button" className="w-button send-transaction__button" onClick={handleButton}>{!transactionHash ? 'Send' : 'Back'}</button>
+        </div>
+        : <div className='send-transaction__hash'>
+          <h5 className='send-transaction__title'>Success! Transaction hash:</h5>
+          {transactionHash}
+        </div>
+      }
+      <div className="divider"/>
+      <button className="w-button send-transaction__button" onClick={handleButton}>{showBackButton ? 'Back' : 'Send'}</button>
     </div>
   );
-}
+};

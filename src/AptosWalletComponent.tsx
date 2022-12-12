@@ -1,7 +1,7 @@
 import React, {
   useEffect, useState, SyntheticEvent, useCallback,
 } from 'react';
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { WalletName } from '@manahippo/aptos-wallet-adapter';
 
 import './styles.scss';
@@ -68,7 +68,7 @@ export function AptosPontemWallet() {
     } catch (e) {
       console.log(e);
     }
-  }, [ currentAdapterName, handleConnect]);
+  }, [currentAdapterName, handleConnect]);
 
   const handleDisconnect = useCallback(async () => {
     try {
@@ -103,7 +103,6 @@ export function AptosPontemWallet() {
       <Address walletName={currentAdapterName} address={currentAddress} />
       { account?.publicKey && (<div> publicKey: {account?.publicKey}</div>) }
       { network?.name && (<div>network: {network?.name}</div>) }
-
 
       {connected && (
         <SendTransaction
