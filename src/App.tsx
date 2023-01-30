@@ -8,7 +8,7 @@ import { PetraWallet } from 'petra-plugin-wallet-adapter';
 import './styles.scss';
 import { PontemWallet as PontemWalletComponent } from './PontemWallet';
 import { HippoPontemWallet } from './HippoPontemWallet';
-import { Header } from './components';
+import { Header, Widget } from './components';
 import { localStorageKey } from './consts';
 import { AptosPontemWallet } from './AptosWalletComponent';
 
@@ -32,14 +32,13 @@ export const App = () => (
           <Route path="/pontem-native" element={<PontemWalletComponent />} />
           <Route
             path="/hippo-adapter"
-            element={(
-              <WalletProvider
+            element={<WalletProvider
                 wallets={wallets}
                 localStorageKey={localStorageKey}
                 autoConnect={autoConnect}>
                 <HippoPontemWallet autoConnect={autoConnect} />
               </WalletProvider>
-                      )}
+            }
           />
           <Route path="/aptos-adapter" element={
             <AptosWalletAdapterProvider plugins={plugins} autoConnect={true}>
@@ -47,6 +46,7 @@ export const App = () => (
             </AptosWalletAdapterProvider>
           }>
           </Route>
+           <Route path="/widget" element={<Widget/>}/>
         </Routes>
       </div>
     </HashRouter>

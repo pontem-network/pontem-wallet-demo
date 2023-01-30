@@ -14,9 +14,14 @@ export function Header() {
       <NavLink to="/hippo-adapter" className={getActiveLink}>
         <Link variant="button" href="/Users/dmitrijkuksenko/wallet-example/public" underline="hover">Hippo Wallet Adapter</Link>
       </NavLink>
+
       <NavLink to="/aptos-adapter" className={getActiveLink}>
         <Link variant="button" href="/Users/dmitrijkuksenko/wallet-example/public" underline="hover">Aptos Wallet Adapter</Link>
       </NavLink>
+      <NavLink to="/widget" className={getActiveLink}>
+      <Link variant="button" href="/Users/dmitrijkuksenko/wallet-example/public"
+        underline="hover">Widget</Link>
+       </NavLink>
     </header>
   );
 }

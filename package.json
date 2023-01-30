@@ -31,7 +31,8 @@
     "stream-browserify": "^3.0.0",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4",
-    "@craco/craco": "^7.0.0"
+    "@craco/craco": "^7.0.0",
+    "@pontem/liquidswap-widget": "0.1.1"
   },
   "scripts": {
     "start": "craco start",
