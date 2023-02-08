@@ -1,12 +1,36 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState, useRef } from 'react';
 import { loadWidget } from '@pontem/liquidswap-widget';
 
 export const Widget = () => {
   const [dataNetwork, setDataNetwork] = useState({ name: 'mainnet', chainId: '1' });
   const [dataAccount, setDataAccount] = useState('0x019b68599dd727829dfc5036dec02464abeacdf76e5d17ce43352533b1b212b8');
+  const [transactionStatus, setTransactionStatus] = useState<{ status: string, hash: string | null }>(
+    { status: 'pending', hash: null },
+  );
+
+  const ref = useRef();
+
+  const transactionHandler = (props: any) => {
+    console.log('transactionHandler');
+    setTimeout(() => {
+      setTransactionStatus({ status: 'rejected', hash: null });
+    }, 1000);
+  };
+
+  const processedHandler = () => {
+    console.log('processedHandler');
+    setTransactionStatus({ status: 'pending', hash: null });
+  };
 
   useLayoutEffect(() => {
     loadWidget('liquidswap-widget');
+    customElements.whenDefined('liquidswap-widget').then(() => {
+      if (ref.current) {
+        const nodeElement = ref.current as unknown as Element;
+        nodeElement.addEventListener('signAndSubmitTransaction', transactionHandler);
+        nodeElement.addEventListener('transactionProcessed', processedHandler);
+      }
+    });
   }, []);
 
   const toggleNetwork = () => {
@@ -33,7 +57,13 @@ export const Widget = () => {
 
       <br />
       {/* @ts-ignore */}
-      <liquidswap-widget data-network={JSON.stringify(dataNetwork)} data-account={dataAccount}/>
+      {/* eslint-disable-next-line max-len */}
+      <liquidswap-widget
+        ref={ref}
+        data-network={JSON.stringify(dataNetwork)}
+        data-account={dataAccount}
+        data-transaction={JSON.stringify(transactionStatus)}
+      />
     </div>
   );
 };
