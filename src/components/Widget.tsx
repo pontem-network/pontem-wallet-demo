@@ -28,11 +28,11 @@ export const Widget = () => {
   return (
     <div className="widgetWrapper">
       {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-      {/* @ts-ignore */}
       <button onClick={toggleNetwork}>toggle network</button>
       <button onClick={toggleAccount}>toggle account</button>
 
       <br />
+      {/* @ts-ignore */}
       <liquidswap-widget data-network={JSON.stringify(dataNetwork)} data-account={dataAccount}/>
     </div>
   );
