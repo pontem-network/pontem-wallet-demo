@@ -1,16 +1,12 @@
-import React, {
-  useEffect, useState, SyntheticEvent, useCallback,
-} from 'react';
-import { useWallet } from '@aptos-labs/wallet-adapter-react';
-import { WalletName } from '@manahippo/aptos-wallet-adapter';
+import React, { useEffect, useState, SyntheticEvent, useCallback } from "react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { WalletName } from "@manahippo/aptos-wallet-adapter";
 
-import './styles.scss';
-import { TAptosCreateTx } from './types';
-import { camelCaseKeysToUnderscore } from './utils';
-import {
-  SendTransaction, Address, Hint, BasicModal,
-} from './components';
-import { localStorageKey } from './consts';
+import "./styles.scss";
+import { TAptosCreateTx } from "./types";
+import { camelCaseKeysToUnderscore } from "./utils";
+import { SendTransaction, Address, Hint, BasicModal } from "./components";
+import { localStorageKey } from "./consts";
 
 export function AptosPontemWallet() {
   const {
@@ -24,7 +20,9 @@ export function AptosPontemWallet() {
     signAndSubmitTransaction,
   } = useWallet();
 
-  const [currentAdapterName, setAdapterName] = useState<string | undefined>(wallet?.name);
+  const [currentAdapterName, setAdapterName] = useState<string | undefined>(
+    wallet?.name
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(account?.address);
 
@@ -47,28 +45,36 @@ export function AptosPontemWallet() {
     }
   };
 
-  const handleConnect = useCallback(async (adapterName: string) => {
-    if (adapterName) {
-      try {
-        await connect(adapterName as WalletName);
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
-    }
-  }, [connect]);
-
-  const handleAdapterClick = useCallback(async (event: SyntheticEvent<HTMLButtonElement>) => {
-    const walletName = (event.currentTarget as HTMLButtonElement).getAttribute('data-value');
-
-    try {
-      if (walletName && currentAdapterName !== walletName) {
-        setAdapterName(walletName);
-        await handleConnect(walletName);
-        onModalClose();
+  const handleConnect = useCallback(
+    async (adapterName: string) => {
+      if (adapterName) {
+        try {
+          await connect(adapterName as WalletName);
+          // eslint-disable-next-line no-empty
+        } catch (e) {}
       }
-    } catch (e) {
-      console.log(e);
-    }
-  }, [currentAdapterName, handleConnect]);
+    },
+    [connect]
+  );
+
+  const handleAdapterClick = useCallback(
+    async (event: SyntheticEvent<HTMLButtonElement>) => {
+      const walletName = (
+        event.currentTarget as HTMLButtonElement
+      ).getAttribute("data-value");
+
+      try {
+        if (walletName && currentAdapterName !== walletName) {
+          setAdapterName(walletName);
+          await handleConnect(walletName);
+          onModalClose();
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [currentAdapterName, handleConnect]
+  );
 
   const handleDisconnect = useCallback(async () => {
     try {
@@ -97,12 +103,20 @@ export function AptosPontemWallet() {
 
   return (
     <div className="wallet">
-      {!connected && <button className="w-button" onClick={onModalOpen} type="button">Connect wallet</button>}
-      {connected && <button className="w-button" onClick={handleDisconnect} type="button">Disconnect wallet</button>}
+      {!connected && (
+        <button className="w-button" onClick={onModalOpen} type="button">
+          Connect wallet
+        </button>
+      )}
+      {connected && (
+        <button className="w-button" onClick={handleDisconnect} type="button">
+          Disconnect wallet
+        </button>
+      )}
 
       <Address walletName={currentAdapterName} address={currentAddress} />
-      { account?.publicKey && (<div> publicKey: {account?.publicKey}</div>) }
-      { network?.name && (<div>network: {network?.name}</div>) }
+      {account?.publicKey && <div> publicKey: {account?.publicKey}</div>}
+      {network?.name && <div>network: {network?.name}</div>}
 
       {connected && (
         <SendTransaction
@@ -114,7 +128,7 @@ export function AptosPontemWallet() {
       {!connected && <Hint hint="connect wallet" />}
 
       <BasicModal
-        adapters={adapters}
+        adapters={wallets}
         isOpen={isModalOpen}
         handleClose={onModalClose}
         handleAdapterClick={handleAdapterClick}
